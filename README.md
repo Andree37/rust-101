@@ -1,2 +1,2 @@
 # rust-101
-Learning Rust with https://rust-unofficial.github.io/too-many-lists/index.html
+Learning Rust with https://doc.rust-lang.org/book/title-page.html
