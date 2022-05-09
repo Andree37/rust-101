@@ -32,4 +32,11 @@ fn main() {
     ];
     // this creates an array with 5 3s
     let a = [3; 5];
+    let x = 2;
+    a_function(x);
+}
+
+fn a_function(mut x: i32) {
+    x += 2;
+    println!("The value of x is: {}", x);
 }
