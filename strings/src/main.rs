@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     let mut s = String::new();
 
@@ -30,4 +32,28 @@ fn main() {
     for c in s.chars() {
         println!("{}", c);
     }
+
+    // hash maps
+    let mut scores: HashMap<String, i32> = HashMap::new();
+
+    scores.insert(String::from("red"), 50);
+    scores.insert(String::from("blue"), 20);
+
+    let teams = vec![
+        String::from("Blue"),
+        String::from("Red"),
+        String::from("Yellow"),
+    ];
+    let initial_scores = vec![10, 50, 20];
+
+    let mut scores: HashMap<String, i32> =
+        teams.into_iter().zip(initial_scores.into_iter()).collect();
+
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
+
+    // use to upsert
+    let value = scores.entry(String::from("Other")).or_insert(10);
+    // and we can use the value and do *value += 1 for instance to update the value
 }
