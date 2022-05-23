@@ -8,12 +8,26 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
-        let query = args.get(1).unwrap().clone();
-        let filename = args.get(2).unwrap().clone();
+        // skip over the first one
+        args.next();
+
+        let query = match args.next() {
+            None => {
+                return Err("Didn't get a query string");
+            }
+            Some(v) => v,
+        };
+
+        let filename = match args.next() {
+            None => {
+                return Err("Didn't get a filename");
+            }
+            Some(v) => v,
+        };
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
@@ -40,21 +54,18 @@ pub fn search<'a>(query: &str, contents: &'a str, case_sensitive: bool) -> Vec<&
     // this is needed because we are returning a vec of references
     let lower_query = String::from(query).to_lowercase();
 
-    let mut results: Vec<&str> = Vec::new();
     let query = if case_sensitive { query } else { &lower_query };
 
-    for line in contents.lines() {
-        if case_sensitive {
-            if line.contains(query) {
-                results.push(line);
-            }
-        } else {
-            if line.to_lowercase().contains(query) {
-                results.push(line);
-            }
-        }
-    }
-    return results;
+    return contents
+        .lines()
+        .filter(|line| {
+            return if case_sensitive {
+                line.contains(query)
+            } else {
+                line.to_lowercase().contains(query)
+            };
+        })
+        .collect();
 }
 
 #[cfg(test)]
