@@ -1,3 +1,6 @@
+//! # Minigrep
+//! Searches for a line containing a query string.
+
 use std::error::Error;
 use std::{env, fs};
 
@@ -49,6 +52,29 @@ pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     return Ok(());
 }
 
+/// Searches for a line in the (query) in the given string (contents). It also accepts
+/// whether we want it to be a case sensitive search or not.
+///
+/// # Examples
+///
+/// ```
+/// let query = "potato";
+/// let contents = "A potato flew around\n my room before you came";
+///
+/// let answer = minigrep::search(query, contents, true);
+///
+///
+/// assert_eq!(vec!["A potato flew around"], answer);
+/// ```
+///
+/// # Panics
+/// scenarios in which it panics
+///
+/// # Errors
+/// describing the kinds of errors that might occur and what conditions
+///
+/// # Safety
+/// if it is unsafe to call, there should be a section explaining why the function is unsafe
 pub fn search<'a>(query: &str, contents: &'a str, case_sensitive: bool) -> Vec<&'a str> {
     // bind the lifetime of the return vector to the one in the contents str
     // this is needed because we are returning a vec of references
