@@ -4,7 +4,9 @@
 // rules at runtime instead of compile time.
 
 use crate::List::{Cons, Nil};
+use crate::OwnList::OwnCons;
 use std::ops::Deref;
+use std::rc::Rc;
 
 // Box
 enum List {
@@ -44,6 +46,15 @@ impl Drop for CustomSmartPointer {
     }
 }
 
+// RC<T>
+
+enum OwnList {
+    OwnCons(i32, Rc<OwnList>),
+    Nil,
+}
+
+// Interior Mutability and REFCELL
+
 fn main() {
     let b = Box::new(5);
     println!("b: {}", b);
@@ -76,4 +87,9 @@ fn main() {
         data: String::from("other potato"),
     };
     println!("SmartCustomPointers created");
+
+    // RC
+    let a = Rc::new(OwnCons(5, Rc::new(OwnCons(10, Rc::new(OwnList::Nil)))));
+    let b = OwnCons(3, Rc::clone(&a));
+    let c = OwnCons(4, Rc::clone(&a));
 }
