@@ -1,3 +1,12 @@
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+enum Message {
+    Hello { id: i32 },
+}
+
 fn main() {
     let favorite_color: Option<&str> = None;
     let is_tuesday = false;
@@ -35,6 +44,33 @@ fn main() {
     let (x, y) = (1, 2);
     let point = (x, y);
     print_coordinates(&point);
+
+    let x = 1;
+
+    match x {
+        1 | 2 | 3..=5 => println!("one or two or 3 to 5"),
+        //    'a'..='z' => println!("got letter thingie"),
+        _ => println!("anything"),
+    }
+
+    let p = Point { x: 2, y: 5 };
+
+    let Point { x, y } = p;
+    // get x and y from point struct
+    assert_eq!(x, 2);
+    assert_eq!(y, 5);
+
+    let msg = Message::Hello { id: 5 };
+    match msg {
+        Message::Hello {
+            // the @ lets us use the actual variable and not a new one in the scope
+            id: id_variable @ 3..=7,
+        } => println!("Found an id in range: {}", id_variable),
+        Message::Hello { id: 10..=12 } => {
+            println!("Found an id in another range")
+        }
+        Message::Hello { id } => println!("Found some other id: {}", id),
+    }
 }
 
 fn print_coordinates(&(x, y): &(i32, i32)) {
